@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build / coverage
+dist/
+build/
+coverage/
+
+# environment & secrets
+.env
+.env.*           # e.g., .env.local, .env.production
+
+# logs & diagnostics
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.log
+
+# OS artifacts
+.DS_Store
+
+# editor / IDE settings
+.vscode/
+.idea/
+
+# Docker override files (local-only tweaks)
+docker-compose.override.yml
+*.local.yml

@@ -11,10 +11,12 @@ export const verifyPrescription = async (req: Request, res: Response) => {
         // Is credential received?
         if (credential) {
             console.log('Credential received:', credential);
+            console.log('\n');
 
             // Is public key received?
             if (jwk) {
                 console.log('Jwk received:', jwk);
+                console.log('\n');
 
                 const verifier = await buildVerifierFromJwk(jwk);
 
@@ -27,8 +29,9 @@ export const verifyPrescription = async (req: Request, res: Response) => {
                     saltGenerator: generateSalt,
                 });
 
-                const validated = await sdjwt.validate(credential);
-                console.log('Validated:', validated);
+
+                const verified = await sdjwt.verify(credential);
+                console.log('Verified:', verified);
             }
         }
 

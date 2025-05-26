@@ -10,10 +10,12 @@ export const holdPrescription = async (req: Request, res: Response) => {
         // Is credential received?
         if (credential) {
             console.log('Credential received:', credential);
+            console.log('\n');
 
             // Is public key received?
             if (jwk) {
                 console.log('Jwk received:', jwk);
+                console.log('\n');
 
                 const verifier = await buildVerifierFromJwk(jwk);
 
@@ -28,16 +30,15 @@ export const holdPrescription = async (req: Request, res: Response) => {
 
                 // Valide the credential using the issuer's public key
                 const validated = await sdjwt.validate(credential);
-                console.log('Validated:', validated);
+                console.log('Validated Credential:', validated);
 
-                // Disclosed credential based on defined frame
+                // Disclosed credential based on defined frame, the clais REQUIRED for this specific transaction
                 const presentationFrame = { ssn: true, prescriptionId: true, medicine: true };
                 // Create the presentation, based on frame and claims
                 const presentation = await sdjwt.present<typeof credential.claims>(
                     credential,
                     presentationFrame,
                 );
-                console.log('presentedSDJwt:', presentation);
 
                 // If the credential matched the signature, forward it to the Relying Party service
                 if (validated) {

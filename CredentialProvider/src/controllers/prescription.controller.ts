@@ -24,9 +24,12 @@ export const requestPrescription = async (req: Request, res: Response) => {
             saltGenerator: generateSalt,
         });
 
-        console.log('PublicJwk:', publicJwk);
-
         const credential = await sdJwt.issue(claims, disclosureFrame);
+
+        // Show for prototype purposes
+        console.log('Issued credential:', credential);
+        console.log('\n');
+        console.log('Issued PublicJwk:', publicJwk);
 
         // ISSUE CRED: Forward the crendtial to the UserWallet(holder), it will be handed over to a post endpoint owned by the UserWallet service
         try {

@@ -1,19 +1,14 @@
 ## Independent Service Architecture
+```
 service/
-
 ├─ src/
-
 │  ├─ routes/
-
 │  │   └─ example.route.js
-
 │  └─ controllers/
-
 │      └─ example.controller.js
-
 ├─ .gitignore
-
 └─ package.json
+```
 
 ## How to run the application
 ### Step 1:

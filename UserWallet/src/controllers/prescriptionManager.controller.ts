@@ -18,7 +18,6 @@ export const holdPrescription = async (req: Request, res: Response) => {
                 console.log('\n');
 
                 const verifier = await buildVerifierFromJwk(jwk);
-
                 const sdjwt = new SDJwtInstance({
                     signer : () => { throw new Error('signer not needed'); },
                     verifier,
@@ -28,17 +27,21 @@ export const holdPrescription = async (req: Request, res: Response) => {
                     saltGenerator: generateSalt,
                 });
 
-                // Valide the credential using the issuer's public key
                 const validated = await sdjwt.validate(credential);
                 console.log('Validated Credential:', validated);
 
-                // Disclosed credential based on defined frame, the clais REQUIRED for this specific transaction
-                const presentationFrame = { ssn: true, prescriptionId: true, medicine: true };
-                // Create the presentation, based on frame and claims
+                // Creating a Verifiable Presentation:
+                // If attemtping to hide claims outside of the disclosure frame, they will be forcefully disclosed
+                const presentationFrame = { firstname: true, lastname: true, cprnr: true, adress: true,  medicine: true, medicalcenter: true, doctor: true };
                 const presentation = await sdjwt.present<typeof credential.claims>(
                     credential,
                     presentationFrame,
                 );
+
+                const data = presentation.toString();
+                const decodedObject = await sdjwt.decode(data);
+                console.log('\n');
+                console.log("SD-JWT-VP being transmitted:", decodedObject);
 
                 // If the credential matched the signature, forward it to the Relying Party service
                 if (validated) {

@@ -17,7 +17,7 @@ export const requestPrescription = async (req: Request, res: Response) => {
         const { signer, verifier, publicJwk } = await createIssuerContext();
         const sdJwt = new SDJwtInstance({
             signer,
-            verifier,
+            verifier: () => { throw new Error('verifier not needed in this phase'); },
             signAlg: ES256.alg,
             hasher: digest,
             hashAlg: 'sha-256',
@@ -30,14 +30,19 @@ export const requestPrescription = async (req: Request, res: Response) => {
         console.log('Issued credential:', credential);
         console.log('\n');
         console.log('Issued PublicJwk:', publicJwk);
+        console.log('\n');
 
-        // ISSUE CRED: Forward the crendtial to the UserWallet(holder), it will be handed over to a post endpoint owned by the UserWallet service
+        const data = credential.toString();
+        const decodedObject = await sdJwt.decode(data);
+        console.log("SD-JWT-VC being transmitted:", decodedObject);
+
+        // ISSUE SD-JWT-VC
         try {
             const forwardingPort = 3002;
 
-            // TODO: Create this endpoint in the UserWallet service
+            // Target URL for forwarding the credential
+            // This is the endpoint of the UserWallet
             const forwardingUrl = `http://localhost:${forwardingPort}/userwallet/hold`;
-
             await fetch(forwardingUrl, {
                 method: 'POST',
                 headers: {

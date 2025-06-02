@@ -31,7 +31,7 @@ export const verifyPrescription = async (req: Request, res: Response) => {
 
 
                 const verified = await sdjwt.verify(credential);
-                console.log('Verified:', verified);
+                console.log('Verified following credential:', verified);
             }
         }
 

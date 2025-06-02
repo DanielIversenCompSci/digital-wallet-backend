@@ -1,6 +1,3 @@
-# digital-wallet-backend
-Code repository related to research project about a danish implementation of of the so called 'European Digital Identity Framework'. This paper explores the development of digital identity solutions in Europe and takes a closer look at the Danish implementation, known as the dk-wallet.
-
 ## Independent Service Architecture
 service/
 ├─ src/
@@ -11,10 +8,10 @@ service/
 ├─ .gitignore
 └─ package.json
 
-## After cloning/pulling
-- Before working on a service always fetch npm modules
-- Run following in the root of the directory:
+## How to run the application
+### Step 1:
 - OPS: START AT THE ROOT
+- Copy and paste the following lines into terminal:
 ***********************
 cd CredentialProvider
 npm i
@@ -26,7 +23,10 @@ cd RelyingParty
 npm i
 cd ..
 ***********************
-- Follow up with a npm run build
+
+### Step 2:
+- Build the dist, translate TypeScript into JS
+- Run the following in a terminal located at the root of the directory:
 ***********************
 cd CredentialProvider
 npm run build
@@ -37,4 +37,19 @@ cd ..
 cd RelyingParty
 npm run build
 cd ..
+***********************
+
+### Step 3:
+- Finally, run an instance of each service, in each their respective terminal
+- This is done to simulate three independent web servers running, which can then communicate with eachother
+- Open terminal 1 and navigate to digital-wallet/CredentialProvider, run following command in the terminal: "npm run start"
+- Open terminal 2 and navigate to digital-wallet/UserWallet, run following command in the terminal: "npm run start"
+- Open terminal 3 and navigate to digital-wallet/RelyingParty, run following command in the terminal: "npm run start"
+
+### Step 4:
+- Open a 4th terminal and perform an intent to interact with the following curl:
+***********************
+curl -X POST http://localhost:3001/credentialprovider/issue \
+-H "Content-Type: application/json" \
+-d '{}'
 ***********************
